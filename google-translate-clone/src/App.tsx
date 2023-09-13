@@ -1,40 +1,38 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Container, Row, Col, Button} from 'react-bootstrap'
 import './App.css';
-import { useReducer } from 'react'
-
-// 1. Create initial state
-const initialState = {
-  fromLanguage: 'auto',
-  toLanguage: 'en',
-  fromText: '',
-  result: '',
-  loading: false
-}
-
-// 2. Create a reducer
-function reducer (state, action) {
-  const { type } = action
-
-  if (type === 'INTERCHANGE_LANGUAGES'){
-    return {
-      ...state,
-      fromLanguage: state.toLanguage,
-      toLanguage: state.fromLanguage
-    }
-  }
-
-  return state
-}
+import { useStore } from './hooks/useStore';
+import { AUTO_LANGUAGE } from './constants';
+import { ArrowsIcon } from './components/Icons';
 
 function App() {
 
-  // 3. usar el hook useReducer
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const { fromLanguage, toLanguage, setFromLanguage, interchangeLanguages } = useStore()
 
   return (
-    <div className='App'>
+    <Container fluid>
       <h1>Google Translate</h1>
-    </div>
+
+      <Row>
+        <Col>
+          <h2>From</h2>
+          {fromLanguage}
+        </Col>
+
+        <Col>
+          <Button variant='link' disabled={fromLanguage === AUTO_LANGUAGE} onClick={interchangeLanguages}>
+            <ArrowsIcon />
+          </Button>
+        </Col>
+
+        <Col>
+          <h2>To</h2>
+          {toLanguage}
+        </Col>
+      </Row>
+
+    </Container>
   )
 }
 
