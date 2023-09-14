@@ -1,35 +1,59 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Container, Row, Col, Button} from 'react-bootstrap'
+import {  Row, Col, Button, Container, Form, Stack} from 'react-bootstrap'
 import './App.css';
 import { useStore } from './hooks/useStore';
 import { AUTO_LANGUAGE } from './constants';
 import { ArrowsIcon } from './components/Icons';
+import { LanguageSelector } from './components/LanguageSelector';
+import { SectionType } from './types.d';
 
 function App() {
 
-  const { fromLanguage, toLanguage, setFromLanguage, interchangeLanguages } = useStore()
-
+  const { fromLanguage, toLanguage, setFromLanguage, setToLanguage, interchangeLanguages } = useStore()
+  
   return (
     <Container fluid>
-      <h1>Google Translate</h1>
+      <h2>Google Translate</h2>
 
       <Row>
         <Col>
-          <h2>From</h2>
-          {fromLanguage}
+          <Stack gap={2}>
+            <LanguageSelector 
+              type={SectionType.From}
+              value={fromLanguage}
+              onChange={setFromLanguage}
+            />
+            <Form.Control
+              as='textarea'
+              placeholder='Introducir texto'
+              autoFocus
+              style={{ height: '150px'}}
+            />
+          </Stack>
         </Col>
-
-        <Col>
+        
+        <Col xs='auto'>
           <Button variant='link' disabled={fromLanguage === AUTO_LANGUAGE} onClick={interchangeLanguages}>
             <ArrowsIcon />
           </Button>
         </Col>
 
         <Col>
-          <h2>To</h2>
-          {toLanguage}
+          <Stack gap={2}>
+            <LanguageSelector 
+              type={SectionType.To}
+              value={toLanguage}
+              onChange={setToLanguage}
+            />
+            <Form.Control
+              as='textarea'
+              placeholder='Traducción'
+              style={{ height: '150px'}}
+            />
+          </Stack>
         </Col>
+        
       </Row>
 
     </Container>
