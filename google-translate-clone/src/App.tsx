@@ -1,16 +1,40 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import {  Row, Col, Button, Container, Form, Stack} from 'react-bootstrap'
+import {  Row, Col, Button, Container, Stack} from 'react-bootstrap'
 import './App.css';
 import { useStore } from './hooks/useStore';
 import { AUTO_LANGUAGE } from './constants';
 import { ArrowsIcon } from './components/Icons';
 import { LanguageSelector } from './components/LanguageSelector';
 import { SectionType } from './types.d';
+import { TextArea } from './components/TextArea';
+import { useEffect } from 'react';
+import { translate } from './services/translate';
 
 function App() {
 
-  const { fromLanguage, toLanguage, setFromLanguage, setToLanguage, interchangeLanguages } = useStore()
+  const { 
+    loading, 
+    fromLanguage, 
+    toLanguage, 
+    fromText, 
+    result, 
+    setFromLanguage, 
+    setToLanguage, 
+    interchangeLanguages, 
+    setFromText, 
+    setResult 
+  } = useStore()
+
+  useEffect(() => {
+    if(fromText === '') return
+    translate({fromLanguage, toLanguage, text: fromText})
+      .then(result => {
+        if(result == null) return
+        setResult(result)
+      })
+      .catch(() => { setResult('Error') })
+  },[fromText, fromLanguage, toLanguage])
   
   return (
     <Container fluid>
@@ -24,11 +48,11 @@ function App() {
               value={fromLanguage}
               onChange={setFromLanguage}
             />
-            <Form.Control
-              as='textarea'
-              placeholder='Introducir texto'
-              autoFocus
-              style={{ height: '150px'}}
+            <TextArea
+              loading={loading}
+              type={SectionType.From}
+              value={fromText}
+              onChange={setFromText}
             />
           </Stack>
         </Col>
@@ -46,10 +70,11 @@ function App() {
               value={toLanguage}
               onChange={setToLanguage}
             />
-            <Form.Control
-              as='textarea'
-              placeholder='Traducción'
-              style={{ height: '150px'}}
+            <TextArea
+              loading={loading}
+              type={SectionType.To}
+              value={result}
+              onChange={setResult}
             />
           </Stack>
         </Col>
