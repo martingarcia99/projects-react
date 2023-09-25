@@ -10,10 +10,13 @@ import {
 	Title,
 } from "@tremor/react";
 
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../hooks/store";
+import { useUsersActions } from "../hooks/useUserActions";
 
 export function ListOfUsers() {
-	const users = useSelector((state) => state.users);
+	const users = useAppSelector((state) => state.users);
+	const { removeUser } = useUsersActions();
+
 	return (
 		<Card>
 			<Title>
@@ -57,6 +60,7 @@ export function ListOfUsers() {
 										strokeWidth={1.5}
 										stroke="currentColor"
 										className="w-6 h-6"
+										role=""
 									>
 										<path
 											strokeLinecap="round"
@@ -65,7 +69,7 @@ export function ListOfUsers() {
 										/>
 									</svg>
 								</button>
-								<button type="button">
+								<button onClick={() => removeUser(item.id)} type="button">
 									<svg
 										aria-label="Remove element"
 										xmlns="http://www.w3.org/2000/svg"
@@ -74,6 +78,7 @@ export function ListOfUsers() {
 										strokeWidth={1.5}
 										stroke="currentColor"
 										className="w-6 h-6"
+										role=""
 									>
 										<path
 											strokeLinecap="round"
