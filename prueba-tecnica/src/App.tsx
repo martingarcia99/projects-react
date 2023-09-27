@@ -9,6 +9,10 @@ function App() {
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
 
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+
   const originalUsers = useRef<User[]>([])
 
   const toggleColors = () => {
@@ -30,14 +34,23 @@ function App() {
   }
 
   useEffect(() => {
-    fetch('https://randomuser.me/api/?results=100')
-      .then(res => res.json())
+    setLoading(true)
+    setError(false)
+    fetch('https://randomuser.me/api/?results=100&seed=martin')
+      .then(async res => {
+        if(!res.ok) throw new Error('Error en la petición')
+        return await res.json()
+      })
       .then(res => {
         setUsers(res.results)
         originalUsers.current = res.results
       })
       .catch(err =>{
+        setError(err)
         console.log(err)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   },[])
 
@@ -86,8 +99,14 @@ function App() {
         }} />
       </header>
       <main>
-        <UsersLists changeSorting={handleChangeSort} deleteUser={handleDelete} showColors={showColors} users={sortedUsers}/>
-      </main>
+        {loading && <p>Cargando ...</p>}
+        {!loading && error && <p>Ha habido un error</p>}
+        {!loading && !error && users.length == 0 && <p>No hay usuarios</p>}
+        {!loading && !error && users.length > 0 && 
+          <UsersLists changeSorting={handleChangeSort} deleteUser={handleDelete} showColors={showColors} users={sortedUsers}/>
+        }
+        <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar más resultados</button>
+        </main>
       
     </div>
   )
