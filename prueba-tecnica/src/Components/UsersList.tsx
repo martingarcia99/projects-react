@@ -1,10 +1,10 @@
 import { SortBy, type User } from '../types.d'
 
 interface Props{
-    showColors: boolean,
-    users: User[],
     deleteUser: (email:string) => void,
-    changeSorting : (sort: SortBy) => void
+    changeSorting : (sort: SortBy) => void,
+    users: User[],
+    showColors: boolean,
 }
 
 export function UsersLists ({ changeSorting, deleteUser, users,showColors }:Props){

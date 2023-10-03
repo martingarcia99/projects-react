@@ -1,19 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import './App.css'
-import { SortBy, type User } from './types.d'
+import { SortBy } from './types.d'
 import { UsersLists } from './Components/UsersList'
+import { useUsers } from './hooks/useUsers'
 
 function App() {
-  const [users, setUsers] = useState<User[]>([])
+  
+  const { isLoading, isError, users, refetch, fetchNextPage, hasNextPage } = useUsers()
+
   const [showColors, setShowColors] = useState(false)
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const originalUsers = useRef<User[]>([])
 
   const toggleColors = () => {
     setShowColors(!showColors)
@@ -25,35 +22,13 @@ function App() {
   }
 
   const handleDelete = (email:string) => {
-    const filteredUsers = users.filter((user) => user.email !== email)
-    setUsers(filteredUsers)
+    //const filteredUsers = users.filter((user) => user.email !== email)
+    //setUsers(filteredUsers)
   }
 
   const handleReset = () => {
-    setUsers(originalUsers.current)
+    void refetch()
   }
-
-  useEffect(() => {
-    setLoading(true)
-    setError(false)
-    fetch('https://randomuser.me/api/?results=100&seed=martin')
-      .then(async res => {
-        if(!res.ok) throw new Error('Error en la petición')
-        return await res.json()
-      })
-      .then(res => {
-        setUsers(res.results)
-        originalUsers.current = res.results
-      })
-      .catch(err =>{
-        setError(err)
-        console.log(err)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  },[])
-
 
   const filteredUsers = useMemo(() => {
     return filterCountry !== null && filterCountry.length > 0
@@ -99,13 +74,16 @@ function App() {
         }} />
       </header>
       <main>
-        {loading && <p>Cargando ...</p>}
-        {!loading && error && <p>Ha habido un error</p>}
-        {!loading && !error && users.length == 0 && <p>No hay usuarios</p>}
-        {!loading && !error && users.length > 0 && 
+        {users.length > 0 && 
           <UsersLists changeSorting={handleChangeSort} deleteUser={handleDelete} showColors={showColors} users={sortedUsers}/>
         }
-        <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar más resultados</button>
+        {isLoading && <p>Cargando ...</p>}
+        {isError && <p>Ha habido un error</p>}
+        {!isError && users.length == 0 && <p>No hay usuarios</p>}
+        {!isLoading && !isError && hasNextPage &&
+          <button onClick={() => { void fetchNextPage() }}>Cargar más resultados</button>
+        }
+        {!isLoading && !isError && !hasNextPage && <p>No hay más resultados</p>}
         </main>
       
     </div>
