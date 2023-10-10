@@ -20,6 +20,9 @@ dependencies:
   '@mui/material':
     specifier: ^5.14.11
     version: 5.14.11(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.24)(react-dom@18.2.0)(react@18.2.0)
+  canvas-confetti:
+    specifier: 1.9.0
+    version: 1.9.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -34,6 +37,9 @@ dependencies:
     version: 4.4.3(@types/react@18.2.24)(react@18.2.0)
 
 devDependencies:
+  '@types/canvas-confetti':
+    specifier: ^1.6.1
+    version: 1.6.1
   '@types/react':
     specifier: ^18.2.15
     version: 18.2.24
@@ -857,6 +863,10 @@ packages:
     resolution: {integrity: sha512-myfUej5naTBWnqOCc/MdVOLVjXUXtIA+NpDrDBKJtLLg2shUjBu3cZmB/85RyitKc55+lUUyl7oRfLOvkr2hsw==}
     dev: true
 
+  /@types/canvas-confetti@1.6.1:
+    resolution: {integrity: sha512-wTSI/k/586KnzL8Inm0yXe/U9x0sO2tc4j/osIAZVsE+hyj2S/M+sdR5zDDLygEkohhlG948zNVBG5QiI4Z2mw==}
+    dev: true
+
   /@types/hast@2.3.6:
     resolution: {integrity: sha512-47rJE80oqPmFdVDCD7IheXBrVdwuBgsYwoczFvKmwfo2Mzsnt+V9OONsYauFmICb6lQPpCuXYJWejBNs4pDJRg==}
     dependencies:
@@ -1363,6 +1373,10 @@ packages:
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
+
+  /canvas-confetti@1.9.0:
+    resolution: {integrity: sha512-0UGU/T5Un/Cd4Aj4fu/p/oVQm8Il+brK5xcmY+y77u7PXuyNJD4ODUWe01A5o3GUI9Bb8lOBlQ10VdaDsY1FBA==}
+    dev: false
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
